@@ -1,0 +1,333 @@
+{
+  "name": "Student Automation Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        272
+      ],
+      "id": "a0455006-ab08-4789-8428-e59cb6fecc18",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU",
+          "mode": "list",
+          "cachedResultName": "Log1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -640,
+        272
+      ],
+      "id": "e7998dce-bb7a-4555-8f8c-5af8caa6b878",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7eYGhh6kilBDUgBO",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -464,
+        272
+      ],
+      "id": "e5623f1d-4732-4380-9587-da88fc6f5d15",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Bienvenida</title>\n</head>\n<body style=\"margin:0; padding:0; font-family: Arial, sans-serif; background-color:#eef2f7;\">\n\n  <table align=\"center\" width=\"600\" style=\"background-color:#ffffff; margin-top:30px; border-radius:10px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.1);\">\n\n```\n<!-- Header -->\n<tr>\n  <td style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); color:#ffffff; text-align:center; padding:30px;\">\n    <h1 style=\"margin:0;\">¡Bienvenido a Nuestra Comunidad!</h1>\n  </td>\n</tr>\n\n<!-- Body -->\n<tr>\n  <td style=\"padding:30px; color:#333; text-align:center;\">\n    \n    <p style=\"font-size:16px;\">\n      Hola {{ $json['NOMBRE '] }}, estamos encantados de tenerte con nosotros.  \n      Te damos la bienvenida y agradecemos tu confianza en nuestro proyecto.\n    </p>\n\n    <p style=\"font-size:15px; color:#555;\">\n      Muy pronto recibirás contenido exclusivo, novedades y recursos diseñados para ayudarte a aprovechar al máximo nuestra plataforma.\n    </p>\n\n    <!-- Button -->\n    <div style=\"margin:30px 0;\">\n      <a href=\"{{ $json[\"link\"] || \"https://tu-link.com\" }}\" \n         style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); color:#ffffff; padding:12px 25px; text-decoration:none; border-radius:6px; font-weight:bold;\">\n         Explorar ahora\n      </a>\n    </div>\n\n  </td>\n</tr>\n\n<!-- Footer -->\n<tr>\n  <td style=\"background-color:#f1f5f9; text-align:center; padding:15px; font-size:12px; color:#777;\">\n    © 2026 Tu Proyecto - Todos los derechos reservados\n  </td>\n</tr>\n```\n\n  </table>\n\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -256,
+        288
+      ],
+      "id": "d7178ac3-844b-44ac-939d-f321a2340058",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.CORREO }}",
+        "subject": "Bienvenido a la comunidad ",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -48,
+        288
+      ],
+      "id": "ff9d92bd-28fe-4b59-a9ae-4b8ad0392fb4",
+      "name": "Send a message",
+      "webhookId": "2d131b2b-1d70-4b6c-8654-70ab32f3d449",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jAy42Dgru7k21sUC",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8b2c8624-7d3d-4156-94c2-7cf2f467cec2",
+              "name": "Enviado",
+              "value": "Enviado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        288
+      ],
+      "id": "ea62d85c-e331-4bfb-a2a4-70a4592921ee",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        288
+      ],
+      "id": "3357e4c6-bc8a-4de0-9994-f5a371dfd546",
+      "name": "Wait",
+      "webhookId": "272255da-c9f3-4c30-a9e5-9e32512c6a37"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU",
+          "mode": "list",
+          "cachedResultName": "Log1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1d-D9jJGR4Lcczfol2sI_Iovp_4nWMN-9Zn9zAOI58LU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            " ID": "={{ $('Get row(s) in sheet').item.json[' ID'] }}",
+            "ESTATUS": "={{ $json.Enviado }}"
+          },
+          "matchingColumns": [
+            " ID"
+          ],
+          "schema": [
+            {
+              "id": " ID",
+              "displayName": " ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "NOMBRE ",
+              "displayName": "NOMBRE ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CORREO",
+              "displayName": "CORREO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ESTATUS",
+              "displayName": "ESTATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        288
+      ],
+      "id": "338b9ee7-f8c5-4b39-8e26-94b58b3d0a18",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yf7tJLxnCNB1kprq",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "33b39625-6ef6-48c2-a4ad-5152d6188b50",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "53702ee0f534faeb8fe35a6e3cd15f9e57b681fce39a82a44fcc734822448582"
+  },
+  "id": "nIcDQOkSgRzE24vX",
+  "tags": []
+}
